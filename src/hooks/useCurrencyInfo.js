@@ -1,34 +1,25 @@
-// import {useEffect, useState} from "react"
+import { useEffect, useState } from "react";
 
+function useCurrencyInfo(currency) {
+  const [data, setData] = useState({});
 
-// function useCurrencyInfo(currency){
-//     const [data, setData] = useState({})
-//     useEffect(() => {
-//         fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency}.json`)
-//         .then((res) => res.json())
-//         .then((res) => setData(res[currency]))
-//         console.log(data);
-//     }, [currency])
-//     console.log(data);
-//     return data
-// }
+  useEffect(() => {
+    if (!currency) return;
 
-// export default useCurrencyInfo;
+    fetch(`https://open.er-api.com/v6/latest/${currency}`)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res && res.rates) {
+          setData(res.rates);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching currency data:", err);
+        setData({});
+      });
+  }, [currency]);
 
-
-import {useEffect, useState} from "react"
-
-
-function useCurrencyInfo(currency){
-    const [data, setData] = useState({})
-    useEffect(() => {
-        fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency}.json`)
-        .then((res) => res.json())
-        .then((res) => setData(res[currency]))
-        console.log(data);
-    }, [currency])
-    console.log(data);
-    return data
+  return data;
 }
 
 export default useCurrencyInfo;
